@@ -19,7 +19,7 @@ public class BookJsonTests {
     @Test
     @DisplayName("직렬화 테스트")
     void testSerialize() throws Exception {
-        Book book = new Book("1234567890", "title", "author", 9.90);
+        Book book = Book.of("1234567890", "title", "author", 9.90);
 
         JsonContent<Book> jsonContent = json.write(book); // json으로 직렬화
 
@@ -51,6 +51,6 @@ public class BookJsonTests {
 
         assertThat(json.parse(content))
                 .usingRecursiveComparison() // 재귀적으로 필드의 값들을 비교
-                .isEqualTo(new Book("1234567890", "Title", "Author", 9.90));
+                .isEqualTo(Book.of("1234567890", "Title", "Author", 9.90));
     }
 }
