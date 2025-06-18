@@ -29,7 +29,7 @@ jobs:
           fail-build: false # 보안 취약성 발견시 빌드 실패 여부
           severity-cutoff: high # 보안 유형
       - name: Upload vulnerability report
-        uses: github/codeql-action/upload-sarif@v3 # 깃허브로 보안 취약성 리포트 전송
+        uses: github/codeql-action/upload-sarif@v4 # 깃허브로 보안 취약성 리포트 전송
         if: success() || failure() # 이전 단계가 실패해도 전송
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
