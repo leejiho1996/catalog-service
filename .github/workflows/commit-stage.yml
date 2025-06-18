@@ -22,8 +22,8 @@ jobs:
             chmod +x gradlew
             ./gradlew build
       - name: Code vulnerability scanning
-        uses: anchore/scan-action@v3 # 그라이프를 이용해 스캔
-        id: scan # 현재 단계의 식벼자를 할당하고 이후의 단계에서 참고 가능
+        uses: anchore/scan-action@v4 # 그라이프를 이용해 스캔
+        id: scan # 현재 단계의 식별자를 할당하고 이후의 단계에서 참고 가능
         with:
           path: "${{ github.workspace }}" # 체크아웃 저장소 경로
           fail-build: false # 보안 취약성 발견시 빌드 실패 여부
