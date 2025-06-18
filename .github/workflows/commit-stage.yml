@@ -47,3 +47,7 @@ jobs:
         if: success() || failure() # 이전 단계가 실패해도 전송
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/catalogdb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
