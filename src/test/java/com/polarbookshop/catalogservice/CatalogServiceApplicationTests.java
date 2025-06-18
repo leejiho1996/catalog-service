@@ -21,7 +21,7 @@ class CatalogServiceApplicationTests {
 	@Test
 	@DisplayName("책 등록 테스트")
 	void whenPostRequestThenBookCreated() {
-		Book expectedBook = new Book("1231231231", "TITLE", "AUTHOR", 9.90);
+		Book expectedBook = Book.of("1231231231", "TITLE", "AUTHOR", 9.90);
 
 		webClient
 				.post()

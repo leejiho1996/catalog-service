@@ -32,6 +32,9 @@ dependencies {
 	implementation 'org.springframework.retry:spring-retry' // 스프링 리트라이
 	implementation 'org.springframework.boot:spring-boot-starter-actuator' // 액츄에이터 (새로고침 이벤트 트리거 엔드포인트 설정)
 
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	runtimeOnly 'org.postgresql:postgresql'
+
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor" // properties에 대한 메타데이터 생성
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -8,6 +8,13 @@ server:
       min-spare: 5
 
 spring:
+  datasource:
+    username: user
+    password: password
+    url: jdbc:postgresql://localhost:5432/polardb_catalog
+    hikari:
+      connection-timeout: 2000
+      maximum-pool-size: 5
   application:
     name: catalog-service
   config:
@@ -17,7 +24,7 @@ spring:
       uri: http://localhost:8888
       request-connect-timeout: 5000
       request-read-timeout: 5000
-      fail-fast: true # 설정서버 연결 실패를 치명적 오류로 인식
+      fail-fast: false # 설정서버 연결 실패를 치명적 오류로 인식
       retry:
         max-attempts: 6
         initial-interval: 1000
