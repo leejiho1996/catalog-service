@@ -6,3 +6,29 @@ server:
     threads:
       max: 50
       min-spare: 5
+
+spring:
+  application:
+    name: catalog-service
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      uri: http://localhost:8888
+      request-connect-timeout: 5000
+      request-read-timeout: 5000
+      fail-fast: true # 설정서버 연결 실패를 치명적 오류로 인식
+      retry:
+        max-attempts: 6
+        initial-interval: 1000
+        max-interval: 2000
+        multiplier: 1.1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh # /actuator/refresh 엔드포인트를 노출한다.
+
+polar:
+  greeting: Welcome to the local book catalog!
