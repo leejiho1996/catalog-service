@@ -25,7 +25,7 @@ class BookValidationTest {
     @Test
     @DisplayName("모든 필드가 정확할 때")
     void whenAllFieldsCorrectThenValidationSucceeds() {
-        Book book = Book.of("1234567890", "Title", "Author", 9.90);
+        Book book = Book.of("1234567890", "Title", "Author", 9.90, "Polarsophia");
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
         assertThat(violations).isEmpty();
     }
@@ -34,7 +34,7 @@ class BookValidationTest {
     @Test
     @DisplayName("ISBN 필드 오류가 있을 때")
     void whenIsbnNotDefinedThenValidationFails() {
-        Book book = Book.of("a123467890", "Title", "Author", 9.90);
+        Book book = Book.of("a123467890", "Title", "Author", 9.90, "Polarsophia");
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
         assertThat(violations).hasSize(1);
         assertThat(violations.iterator().next().getMessage())
