@@ -3,7 +3,7 @@ on: push
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: leejiho1996/catalog-service
+  IMAGE_NAME: leejiho1996/CloundNativeSpring
   VERSION: latest
 
 #    env:
