@@ -55,6 +55,19 @@ dependencyManagement {
 	}
 }
 
+bootBuildImage { // 빌드 팩을 이용해 이미지를 빌드하기 위한 작업 (패키토 사용)
+	imageName = "${project.name}" // 버전 지정 안하면 latest로 된다
+	environment = ["BP_JVM_VERSION" : "21.*"] // 이미지에 설치할 JVM 버전
+
+	docker { // 컨테이너 저장소 (ex 깃허브 저장소) 연결을 위한 섹션
+		publishRegistry { // 컨테이너 저장소 인증을 위한 섹션, gradle 속성을 통해 전달
+			username = project.findProperty("registryUsername")
+			password = project.findProperty("registryToken")
+			url = project.findProperty("registryUrl")
+		}
+	}
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

@@ -1,6 +1,16 @@
 name: Commit Stage
 on: push
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: leejiho1996/catalog-service
+  VERSION: latest
+
+#    env:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/catalogdb
+#      SPRING_DATASOURCE_USERNAME: user
+#      SPRING_DATASOURCE_PASSWORD: password
+
 jobs:
   build:
     name: Build and Test
@@ -47,7 +57,47 @@ jobs:
         if: success() || failure() # 이전 단계가 실패해도 전송
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
-#    env:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/catalogdb
-#      SPRING_DATASOURCE_USERNAME: user
-#      SPRING_DATASOURCE_PASSWORD: password
+
+  package:
+    name: Package and Publish
+    if: ${{ github.ref == 'refs/heads/main' }} # main 브랜치에 대해서만 실행
+    needs: [ build ] # build job이 성공했을 때만 실행
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+      security-events: write # 깃허브로 보안 이벤트를 제출하기 위한 권한
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+      - name: Build container image
+        run: |  # 스프링 빌드팩을 이용해 빌드
+          chmod +x gradlew
+          ./gradlew bootBuildImage \  
+            --imageName ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+      - name: OCI image vulnerability scanning
+        uses: anchore/scan-action@v3 # 취약성 검사를 위해 스캐닝
+        id: scan
+        with:
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          fail-build: false # 취약성이 발견되도 빌드실패 x
+          severity-cutoff: high
+      - name: Upload vulnerability report
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+      - name: Log into container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }} # 현재 사용자
+          password: ${{ secrets.GITHUB_TOKEN }} # 엑세스 토큰
+      - name: Publish container image
+        run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
