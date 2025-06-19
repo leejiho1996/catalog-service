@@ -5,20 +5,20 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-22.04
-    services:
-      postgres:
-        image: postgres:13
-        env:
-          POSTGRES_DB: catalogdb
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: password
-        options: >-
-          --health-cmd "pg_isready -U test"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
+#    services:
+#      postgres:
+#        image: postgres:13
+#        env:
+#          POSTGRES_DB: catalogdb
+#          POSTGRES_USER: user
+#          POSTGRES_PASSWORD: password
+#        options: >-
+#          --health-cmd "pg_isready -U test"
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#        ports:
+#          - 5432:5432
     permissions:
       contents: read
       security-events: write
@@ -47,7 +47,7 @@ jobs:
         if: success() || failure() # 이전 단계가 실패해도 전송
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
-    env:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/catalogdb
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
+#    env:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/catalogdb
+#      SPRING_DATASOURCE_USERNAME: user
+#      SPRING_DATASOURCE_PASSWORD: password

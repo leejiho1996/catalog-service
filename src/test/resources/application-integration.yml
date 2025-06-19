@@ -1,0 +1,3 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:14.12:/// # 테스트 컨테이너 모듈 지정
