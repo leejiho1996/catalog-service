@@ -1,5 +1,6 @@
 server:
   port: 9001
+  shutdown: graceful # 우아한 종료 (서버가 종료 될 때 새로운 요청을 받지 않고, 그 시점의 남은 요청은 모두 완료)
   tomcat:
     connection-timeout: 2s
     keep-alive-timeout: 15s
@@ -8,6 +9,8 @@ server:
       min-spare: 5
 
 spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 15s # 우아한 종료 전 15초의 기간을 둔다
   datasource:
     username: user
     password: password
@@ -20,7 +23,7 @@ spring:
     name: catalog-service
   config:
     import: "optional:configserver:"
-  cloud:
+  cloud: # 설정서버(config server)와 관련된 설정
     config:
       uri: http://localhost:8888
       request-connect-timeout: 5000

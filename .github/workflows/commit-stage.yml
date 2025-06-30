@@ -57,6 +57,16 @@ jobs:
         if: success() || failure() # 이전 단계가 실패해도 전송
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
+      # 쿠버네티스 manifest 유효성 검사
+      - name: Setup tools
+        uses: alexellis/setup-arkade@v3
+      - name: Install tools
+        uses: alexellis/arkade-get@master
+        with:
+          kubeconform: latest
+      - name: Validate Kubernetes manifests
+        run: |
+          kubeconform --strict k8s
 
   package:
     name: Package and Publish

@@ -1,0 +1,35 @@
+apiVersion: apps/v1 # 배포 객체에 대한 API 버전
+kind: Deployment # 생성할 객체의 유형
+metadata:
+  name: catalog-service # 배포의 이름
+  labels:
+    app: catalog-service # 배포에 추가할 레이블의 집합
+spec:
+  replicas: 1
+  selector: #  확장할 파드를 선택하기 위해 사용할 레이블을 정의
+    matchLabels:
+      app: catalog-service
+  template: # 파드 생성을 위한 템플릿
+    metadata:
+      labels:
+        app: catalog-service
+    spec:
+      containers: # 파드 내 컨테이너의 목록
+        - name: catalog-service # 파드의 이름
+          image: catalog-service # 컨테이너를 실행하기 위한 이미지 (태그가 없으면 자동으로 latest)
+          imagePullPolicy: IfNotPresent # 이미지가 로컬에 없는 겨우만 컨테이너 저장소에서 다운
+          lifecycle:
+            preStop: # 파드에 SIGTERM(종료신호)를 보내기전에 5초를 기다리게 한다 (파드를 호출하는 다른 파드에 요청 전달 중지를 위한 시간을 벌어다 줌)
+              exec:
+                command: [ "sh", "-c", "sleep 5" ]
+          ports:
+            - containerPort: 9001
+          env: # 파드로 전달되는 환경 변수 목록
+            - name: BPL_JVM_THREAD_COUNT
+              value: "50"
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://config-service
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://polar-postgres/polardb_catalog # polar-deployment에 정의된 대로 생성된 파드
+            - name: SPRING_PROFILES_ACTIVE
+              value: testdata

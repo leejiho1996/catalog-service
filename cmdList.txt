@@ -11,3 +11,15 @@ docker run -d \
 --net catlog-network -p 9001:9001 \
 -e SPRING_DATASOURCE_URL=jdbc:postgresql://polar-postgres:5432/polardb_catalog \
 -e SPRING_PROFILE_ACTIVE=test data catalog-service
+
+# 처음 시작할 때 polar 프로파일 켜줘야함
+minikube start --profile polar
+
+# 미니큐브는 로컬 컨테이너 이미지에 접근할 수없으므로 아래 명령어 사용
+minikube image load catalog-service --profile polar
+
+# 실행 중인 pods 확인
+kubectl get pods -l app=catalog-service
+
+# 리소스 배포
+kubectl apply -f k8s/deployment.yml

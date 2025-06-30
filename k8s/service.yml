@@ -1,0 +1,18 @@
+apiVersion: v1 # 서비스 객체의 API 버전
+kind: Service
+metadata:
+  name: catalog-service # 서비스 이름. 유효한 DNS이름이어야 한다.
+  labels:
+    app: catalog-service # 서비스에 추가될 레이블
+
+spec:
+  type : ClusterIP
+  selector:
+    app: catalog-service # 대상으로 삼고 노출해야 하는 파드를 찾는 데 사용할 레이블 (app=catalog-service 레이블을 가진 모든 Pod로 트래픽을 라우팅)
+  ports:
+    - protocol: TCP # 서비스가 사용할 네트워크 프로토콜
+      port: 80 # 서비스가 노출할 포트
+      targetPort: 9001 # 서비스의 대상이 되는 파드가 노출할 포트
+
+
+# 이 서비스를 외부에 노출하기 위해서는 kubectl port-forward service/catalog-service 9001:80 으로 포트 포워딩 해야 함!
