@@ -34,6 +34,11 @@ spring:
         initial-interval: 1000
         max-interval: 2000
         multiplier: 1.1
+  security:
+    oauth2:
+      resourceserver:
+        jwt: # OAUTH2는 엑세스 토큰에 대한 데이터 형식을 강제로 규정 x, 따라서 명시적으로 지정해야한다.
+          issuer-uri: http://localhost:8080/realms/PolarBookshop # 특정 realm에 대한 정보를 제공한는 keycloak Uri
 
 management:
   endpoints:

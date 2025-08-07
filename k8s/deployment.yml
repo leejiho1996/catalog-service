@@ -1,5 +1,5 @@
 apiVersion: apps/v1 # 배포 객체에 대한 API 버전
-kind: Deployment # 생성할 객체의 유형
+kind: Deployment # 생성 할 객체의 유형
 metadata:
   name: catalog-service # 배포의 이름
   labels:

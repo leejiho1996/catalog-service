@@ -23,3 +23,12 @@ kubectl get pods -l app=catalog-service
 
 # 리소스 배포
 kubectl apply -f k8s/deployment.yml
+
+# polar 로컬 클러스터 실행
+minikube start --cpus 2 --memory 4g --driver docker --profile polar
+
+# 인그레스 NGINX 배포
+minikube addons enable ingress --profile polar
+
+# minikube 클러스터를 로커레서 노출 시키기 위한 명령어
+minikube tunnel --profile polar
