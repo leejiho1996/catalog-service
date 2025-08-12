@@ -33,6 +33,12 @@ spec:
               value: "50"
             - name: SPRING_PROFILES_ACTIVE
               value: testdata
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 9001
+            periodSeconds: 5
+            failureThreshold: 30   # 5초*30=150초까지 기다림 (기동 시간 여유 있게)
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness # 활성 상태를 호출할 엔드포인트
