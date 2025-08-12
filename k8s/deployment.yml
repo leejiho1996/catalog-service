@@ -4,6 +4,10 @@ metadata:
   name: catalog-service # 배포의 이름
   labels:
     app: catalog-service # 배포에 추가할 레이블의 집합
+  annotations:
+    prometheus.io/scrape: "true" # 프로메테우스에게 이 파드에 있는 컨테이너로 부터 데이터를 가져와야함을 알림
+    prometheus.io/path: /actuator/prometheus # 메트릭 Http 엔드포인트
+    prometheus.io/port: "9001" # 메트릭 엔드포인트 포트
 spec:
   replicas: 1
   selector: #  확장할 파드를 선택하기 위해 사용할 레이블을 정의
@@ -33,3 +37,18 @@ spec:
               value: jdbc:postgresql://polar-postgres/polardb_catalog # polar-deployment에 정의된 대로 생성된 파드
             - name: SPRING_PROFILES_ACTIVE
               value: testdata
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+              value: http://polar-keycloak/realms/PolarBookshop
+
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness # 활성 상태를 호출할 엔드포인트
+              port: 9001
+            initialDelaySeconds: 10 # 호출 전 초기 지연시간
+            periodSeconds: 5 # 정보를 가져오는 빈도
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 9001
+            initialDelaySeconds: 5
+            periodSeconds: 15

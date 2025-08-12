@@ -19,6 +19,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/books/**", "/").permitAll()
                         // hasAuthorities() 를 사용하면 SCOPE_ 등 모든 유형의 권한 확인 가능
                         // hasRole을 쓰면 내부적으로 ROLE_ 접두어를 붙혀줌

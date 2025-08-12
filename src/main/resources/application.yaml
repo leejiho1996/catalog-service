@@ -40,11 +40,33 @@ spring:
         jwt: # OAUTH2는 엑세스 토큰에 대한 데이터 형식을 강제로 규정 x, 따라서 명시적으로 지정해야한다.
           issuer-uri: http://localhost:8080/realms/PolarBookshop # 특정 realm에 대한 정보를 제공한는 keycloak Uri
 
+info:
+  system: Polar Bookshop
 management:
   endpoints:
     web:
       exposure:
-        include: refresh # /actuator/refresh 엔드포인트를 노출한다.
+        include: flyway, info, heapdump, health, prometheus # /actuator/health 엔드포인트를 노출한다.
+  endpoint:
+    health:
+      show-details: always # 상세정보 제공
+      show-components: always # 구성요소 정보 제공
+      probes:
+        enabled: true # 활성 및 준비 상태 프로브 지원 활성화
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true # info 엔드포인트에 Java정보 포함
+    os:
+      enabled: true # info 엔드포인트에 OS 정보 포함
+  metrics:
+    tags:
+      application: ${spring.application.name} # 애플리케이션 이름으로 마이크로미터 공통 태그 추가, 이로인해 프로메테우스에는 레이블이 만들어짐
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]" # 로그 수준(%5p) 뒤에 앱이름, 추적 및 스팬 ID 추가
 
 polar:
   greeting: Welcome to the local book catalog!
