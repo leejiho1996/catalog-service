@@ -1,4 +1,3 @@
-
 # Build
 custom_build(
     ref = 'catalog-service',
@@ -8,7 +7,7 @@ custom_build(
 )
 
 # Deploy
-k8s_yaml(['k8s/deployment.yml', 'k8s/service.yml'])
+k8s_yaml(kustomize('k8s')) # k8s 폴더에 있는 Kustomize 리소스로 애플리케이션 실행
 
 # Manage
 k8s_resource('catalog-service', port_forwards=['9001'])

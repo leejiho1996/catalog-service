@@ -22,9 +22,10 @@ spring:
   application:
     name: catalog-service
   config:
-    import: "optional:configserver:"
+    import: ""
   cloud: # 설정서버(config server)와 관련된 설정
     config:
+      enabled: false # 쿠버네티스 configMap 사용으로 비활성화
       uri: http://localhost:8888
       request-connect-timeout: 5000
       request-read-timeout: 5000

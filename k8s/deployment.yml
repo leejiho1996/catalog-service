@@ -31,15 +31,8 @@ spec:
           env: # 파드로 전달되는 환경 변수 목록
             - name: BPL_JVM_THREAD_COUNT
               value: "50"
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://config-service
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://polar-postgres/polardb_catalog # polar-deployment에 정의된 대로 생성된 파드
             - name: SPRING_PROFILES_ACTIVE
               value: testdata
-            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-              value: http://polar-keycloak/realms/PolarBookshop
-
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness # 활성 상태를 호출할 엔드포인트
@@ -52,3 +45,10 @@ spec:
               port: 9001
             initialDelaySeconds: 5
             periodSeconds: 15
+          volumeMounts: # 컨피그맵을 컨테이너에서 볼륨으로 마운트
+            - mountPath: /workspace/config
+              name: catalog-config-volume
+      volumes: # 볼륨 이름
+        - name: catalog-config-volume
+          configMap: # 볼륨을 생성할 컨피그맵
+            name: catalog-config

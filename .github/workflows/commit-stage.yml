@@ -66,7 +66,7 @@ jobs:
           kubeconform: latest
       - name: Validate Kubernetes manifests
         run: |
-          kubeconform --strict k8s
+          kustomize build k8s | kubeconform --strict k8s
 
   package:
     name: Package and Publish
