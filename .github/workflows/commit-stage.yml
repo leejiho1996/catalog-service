@@ -4,7 +4,7 @@ on: push
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: leejiho1996/catalog-service
-  VERSION: latest
+  VERSION: ${{github.sha}} # git commit hash와 동일한 버전으로 릴리스 후보 등록
 
 #    env:
 #      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/catalogdb
@@ -111,3 +111,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }} # 엑세스 토큰
       - name: Publish container image
         run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+      - name: Publish container image(latest) # 앞선 image 에 latest 태그를 붙혀 push
+        run : |
+          docker tag \ 
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} \ 
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
