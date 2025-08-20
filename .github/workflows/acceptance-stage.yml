@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Deliver application to production
-        uses: peter-evans/repository-dispatch@v3 # 다른 저장소에서 워크플로를 시작하도록 이벤트를 보내는 액션
+        uses: peter-evans/repository-dispatch@v3 # 다른 저장소에서 워크플로를 시작하도록 이벤트를 보내는 action
         with:
           token: ${{ secrets.DISPATCH_TOKEN }} # 다른 저장소로 이벤트를 보낼 수 있도록 액션 권한을 위한 토큰
           repository: ${{ env.OWNER }}/${{ env.DEPLOY_REPO }} # 알릴 저장소
