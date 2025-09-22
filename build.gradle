@@ -58,6 +58,15 @@ dependencies {
 
 }
 
+/**
+ * BOM(Bill of Materials)이란?
+ * Maven/Gradle에서 사용하는 의존성 버전 관리 표준 파일
+ * 어떤 라이브러리를 사용할 때, 그 라이브러리가 내부적으로 여러 서브 모듈을 가지고 있으면
+ * (예: spring-cloud-starter-netflix-eureka-client, spring-cloud-starter-gateway 등),
+ * BOM을 가져오면 호환되는 버전 조합을 자동으로 맞춰준다.
+ *
+ * 없으면 각 구성 요소에 관해 직접 버전을 다 지정해줘야한다.
+ */
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
